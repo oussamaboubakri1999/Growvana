@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Tableau de bord</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold">Cultures actives</h2>
+            <!-- Culture stats will go here -->
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold">Alertes</h2>
+            <!-- Alerts will go here -->
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold">Dernières mesures</h2>
+            <!-- Recent measurements will go here -->
+        </div>
+    </div>
+{% endblock %}

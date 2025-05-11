@@ -3,10 +3,132 @@
 {% block title %}Statistiques{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Statistiques des cultures</h1>
-    <div class="bg-white p-4 rounded shadow">
-        <div class="h-64" id="chart-container">
-            <!-- Chart will be rendered here -->
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-semibold mb-6">Statistiques</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Chart.js Temperature Chart -->
+    <div class="bg-white rounded-lg shadow p-6 col-span-1 md:col-span-2 lg:col-span-3">
+        <h2 class="text-xl font-semibold mb-4">Température</h2>
+        <canvas id="temperatureChart" height="120"></canvas>
+    </div>
+        <!-- Culture Statistics -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Statistiques des Cultures</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Nombre total de cultures</p>
+                    <p class="text-xl font-bold">{{ total_cultures }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Cultures actives</p>
+                    <p class="text-xl font-bold">{{ active_cultures }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Cultures terminées</p>
+                    <p class="text-xl font-bold">{{ completed_cultures }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Measurement Statistics -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Statistiques des Mesures</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Mesures totales</p>
+                    <p class="text-xl font-bold">{{ total_measurements }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Mesures aujourd'hui</p>
+                    <p class="text-xl font-bold">{{ today_measurements }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Mesures moyennes par jour</p>
+                    <p class="text-xl font-bold">{{ avg_daily_measurements }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Statistics -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Statistiques des Alertes</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Alertes totales</p>
+                    <p class="text-xl font-bold">{{ total_alerts }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Alertes non résolues</p>
+                    <p class="text-xl font-bold">{{ unresolved_alerts }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Alertes résolues</p>
+                    <p class="text-xl font-bold">{{ resolved_alerts }}</p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Charts Section -->
+    <div class="mt-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Évolution des Mesures</h2>
+            <div id="measurements-chart" class="h-96"></div>
+        </div>
+    </div>
+
+    <!-- Device Statistics -->
+    <div class="mt-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Statistiques des Capteurs</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Capteurs totaux</p>
+                    <p class="text-xl font-bold">{{ total_capteurs }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Capteurs en ligne</p>
+                    <p class="text-xl font-bold">{{ online_capteurs }}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Capteurs hors ligne</p>
+                    <p class="text-xl font-bold">{{ offline_capteurs }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        type: 'line',
+        data: {
+            labels: {{ dates|safe }},
+            datasets: [
+                {
+                    label: 'Température',
+                    data: {{ temperatures|safe }},
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Humidité',
+                    data: {{ humidities|safe }},
+                    borderColor: 'rgb(54, 162, 235)',
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

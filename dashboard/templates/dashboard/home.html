@@ -7,15 +7,33 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white p-4 rounded shadow">
             <h2 class="text-xl font-semibold">Cultures actives</h2>
-            <!-- Culture stats will go here -->
+            <ul>
+                {% for activity in recent_activity %}
+                <li>{{ activity.culture.name }} - {{ activity.timestamp }}</li>
+                {% empty %}
+                <li>Aucune activité récente.</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="bg-white p-4 rounded shadow">
             <h2 class="text-xl font-semibold">Alertes</h2>
-            <!-- Alerts will go here -->
+            <ul>
+                {% for alert in alerts %}
+                <li>{{ alert.message }} - {{ alert.timestamp }}</li>
+                {% empty %}
+                <li>Aucune alerte.</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="bg-white p-4 rounded shadow">
             <h2 class="text-xl font-semibold">Dernières mesures</h2>
-            <!-- Recent measurements will go here -->
+            <ul>
+                {% for measurement in latest_measurements %}
+                <li>{{ measurement.culture.name }} - {{ measurement.timestamp }}</li>
+                {% empty %}
+                <li>Aucune mesure récente.</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Historique Entries</h1>
+<ul>
+{% for entry in historique %}
+    <li><a href="{% url 'historique-detail' entry.pk %}">{{ entry }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-green-700 text-center">Connexion à GrowVana</h2>
+        {% if form.errors %}
+            <div class="bg-red-100 text-red-700 p-2 rounded mb-4">
+                Veuillez corriger les erreurs ci-dessous.
+            </div>
+        {% endif %}
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                {{ form.login.label_tag }}
+                {{ form.login|add_class:'w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500' }}
+            </div>
+            <div class="mb-4">
+                {{ form.password.label_tag }}
+                {{ form.password|add_class:'w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500' }}
+            </div>
+            <div class="mb-4 flex items-center">
+                {{ form.remember|add_class:'mr-2' }}
+                <label for="id_remember">Se souvenir de moi</label>
+            </div>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Se connecter</button>
+        </form>
+        <div class="mt-4 text-center">
+            <a href="{% url 'account_reset_password' %}" class="text-green-600 hover:underline">Mot de passe oublié ?</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

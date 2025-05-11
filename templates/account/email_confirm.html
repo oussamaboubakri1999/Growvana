@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Email - GrowVana{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 text-center">
+        <h2 class="text-2xl font-bold text-green-600 mb-6">Confirm Your Email</h2>
+        {% if confirmation %}
+            <p class="mb-6 text-gray-700">Please confirm that you want to use <span class="font-semibold">{{ confirmation.email_address.email }}</span> as your email address for GrowVana.</p>
+            <form method="post" action="">
+                {% csrf_token %}
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-4">Confirm</button>
+            </form>
+        {% else %}
+            <p class="mb-6 text-gray-700">This confirmation link is invalid or has already been used.</p>
+        {% endif %}
+        <a href="{% url 'account_login' %}" class="text-green-500 hover:text-green-600">Back to Login</a>
+    </div>
+</div>
+{% endblock %}

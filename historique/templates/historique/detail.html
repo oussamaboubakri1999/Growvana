@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Historique Details</h1>
+<div>
+    <p><strong>ID:</strong> {{ entry.id }}</p>
+    <p><strong>Date:</strong> {{ entry.date }}</p>
+    <!-- Add other fields as needed -->
+    <a href="{% url 'historique-list' %}" class="btn btn-primary">Back to list</a>
+</div>
+{% endblock %}

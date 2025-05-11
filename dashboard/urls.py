@@ -6,7 +6,18 @@ app_name = 'dashboard'
 urlpatterns = [
     path('', views.dashboard_home, name='home'),
     path('stats/', views.dashboard_stats, name='stats'),
-    path('settings/', views.dashboard_settings, name='settings'),
     path('devices/', views.dashboard_devices, name='devices'),
     path('notifications/', views.dashboard_notifications, name='notifications'),
+    path('settings/', views.dashboard_settings, name='settings'),
+    
+    # Notifications CRUD
+    path('notifications/create/', views.notifications_create, name='notifications_create'),
+    path('notifications/<int:alert_id>/', views.notifications_detail, name='notifications_detail'),
+    path('notifications/<int:alert_id>/delete/', views.notifications_delete, name='notifications_delete'),
+    
+    # Devices CRUD
+    path('devices/create/', views.devices_create, name='devices_create'),
+    path('devices/<int:capteur_id>/', views.devices_detail, name='devices_detail'),
+    path('devices/<int:capteur_id>/delete/', views.devices_delete, name='devices_delete'),
+    path('devices/<int:capteur_id>/update_status/', views.devices_update_status, name='devices_update_status'),
 ]

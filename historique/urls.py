@@ -6,5 +6,10 @@ router = DefaultRouter()
 router.register(r'culture-historique', views.CultureHistoriqueViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # API endpoints
+    path('api/', include(router.urls)),
+    
+    # Traditional views
+    path('', views.historique_list, name='historique-list'),
+    path('<int:pk>/', views.historique_detail, name='historique-detail'),
 ]

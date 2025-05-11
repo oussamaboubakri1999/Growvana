@@ -1,0 +1,43 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-6">Détails de l'alerte</h2>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Culture</label>
+                <p class="mt-1 text-sm text-gray-900">{{ alert.culture.name }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Message</label>
+                <p class="mt-1 text-sm text-gray-900">{{ alert.message }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Date</label>
+                <p class="mt-1 text-sm text-gray-900">{{ alert.timestamp|date:"d/m/Y H:i" }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Statut</label>
+                <span class="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if alert.is_resolved %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ alert.get_is_resolved_display }}
+                </span>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <a href="{% url 'dashboard:notifications' %}" class="text-gray-600 hover:text-gray-900">
+                    Retour
+                </a>
+                <form method="post" action="{% url 'dashboard:notifications_delete' alert.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-600 hover:text-red-900">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

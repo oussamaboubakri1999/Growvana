@@ -1,0 +1,48 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-6">Détails du capteur</h2>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Identifiant</label>
+                <p class="mt-1 text-sm text-gray-900">{{ capteur.identifier }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Type de capteur</label>
+                <p class="mt-1 text-sm text-gray-900">{{ capteur.type.name }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Culture</label>
+                <p class="mt-1 text-sm text-gray-900">{{ capteur.culture.name }}</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Statut</label>
+                <span class="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% with status=capteur.capteurstatus_set.first %}{% if status.status == 'online' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}{% endwith %}">
+                    {% with status=capteur.capteurstatus_set.first %}{{ status.status|title }}{% endwith %}
+                </span>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Dernière mise à jour</label>
+                <p class="mt-1 text-sm text-gray-900">{% with status=capteur.capteurstatus_set.first %}{{ status.timestamp|date:"d/m/Y H:i" }}{% endwith %}</p>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <a href="{% url 'dashboard:devices' %}" class="text-gray-600 hover:text-gray-900">
+                    Retour
+                </a>
+                <form method="post" action="{% url 'dashboard:devices_delete' capteur.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-600 hover:text-red-900">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,29 +1,50 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/base.html' %}
 
-{% block title %}Notifications - GrowVana{% endblock %}
-
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-green-600 mb-6">Notifications</h1>
-    
-    <div class="bg-white rounded-lg shadow-md p-6">
-        {% if notifications %}
-            <div class="space-y-4">
-                {% for notification in notifications %}
-                <div class="border-b pb-4 {% if not notification.read %}bg-blue-50{% endif %}">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-semibold text-lg">{{ notification.title }}</h3>
-                            <p class="text-gray-600">{{ notification.message }}</p>
-                        </div>
-                        <span class="text-sm text-gray-500">{{ notification.created_at|timesince }} ago</span>
+{% block dashboard_content %}
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold">Alertes</h2>
+            <a href="{% url 'dashboard:notifications_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Nouvelle alerte
+            </a>
+        </div>
+        
+        <div class="space-y-4">
+            {% for alert in alerts %}
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium">{{ alert.message }}</h3>
+                        <p class="text-sm text-gray-500">{{ alert.timestamp|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        {% if alert.is_resolved %}
+                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                            Résolue
+                        </span>
+                        {% else %}
+                        <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+                            Non résolue
+                        </span>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
+                
+                <div class="mt-4 flex justify-end space-x-2">
+                    <a href="{% url 'dashboard:notifications_detail' alert.id %}" class="text-blue-600 hover:text-blue-800">
+                        Détails
+                    </a>
+                    <form method="post" action="{% url 'dashboard:notifications_delete' alert.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-600 hover:text-red-800">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
             </div>
-        {% else %}
-            <p class="text-gray-600">No notifications yet.</p>
-        {% endif %}
+            {% empty %}
+            <p class="text-gray-500">Aucune alerte</p>
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -1,29 +1,97 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/base.html' %}
 
-{% block title %}Settings - GrowVana{% endblock %}
+{% block dashboard_content %}
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Paramètres</h2>
+        <div class="space-y-6">
+            <!-- User Settings -->
+            <div>
+                <h3 class="text-lg font-medium mb-4">Paramètres utilisateur</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Notifications par email</label>
+                            <p class="mt-1 text-sm text-gray-500">Recevoir des notifications par email</p>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Thème</label>
+                            <p class="mt-1 text-sm text-gray-500">Choisir le thème de l'interface</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button class="px-3 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200">Clair</button>
+                            <button class="px-3 py-1 text-sm font-medium rounded-full bg-gray-800 text-white hover:bg-gray-700">Sombre</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-green-600 mb-6">Account Settings</h1>
-    
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <form method="post" class="space-y-4">
-            {% csrf_token %}
-            
+            <!-- System Settings -->
             <div>
-                <label class="block text-gray-700 mb-2">Email</label>
-                <input type="email" value="{{ user.email }}" class="w-full px-4 py-2 border rounded-lg" disabled>
+                <h3 class="text-lg font-medium mb-4">Paramètres système</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Fréquence des mesures</label>
+                            <p class="mt-1 text-sm text-gray-500">Intervalle entre chaque mesure</p>
+                        </div>
+                        <div class="flex items-center">
+                            <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option>15 minutes</option>
+                                <option>30 minutes</option>
+                                <option>1 heure</option>
+                                <option>2 heures</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Seuil d'alerte température</label>
+                            <p class="mt-1 text-sm text-gray-500">Température minimale et maximale</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <input type="number" class="mt-1 block w-24 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Min">
+                            <input type="number" class="mt-1 block w-24 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Max">
+                        </div>
+                    </div>
+                </div>
             </div>
-            
+
+            <!-- Account Settings -->
             <div>
-                <label class="block text-gray-700 mb-2">Username</label>
-                <input type="text" value="{{ user.username }}" class="w-full px-4 py-2 border rounded-lg" disabled>
+                <h3 class="text-lg font-medium mb-4">Paramètres du compte</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                            <p class="mt-1 text-sm text-gray-500">Modifier votre mot de passe</p>
+                        </div>
+                        <div class="flex items-center">
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <p class="mt-1 text-sm text-gray-500">Modifier votre email</p>
+                        </div>
+                        <div class="flex items-center">
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                Update Settings
-            </button>
-        </form>
+
+            <!-- Save Settings -->
+            <div class="pt-8">
+                <button class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Sauvegarder les paramètres
+                </button>
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

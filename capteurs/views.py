@@ -21,7 +21,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CapteurForm, CapteurStatusForm
 
 def capteur_list(request):
-    capteurs = Capteur.objects.all()
+    capteurs = Capteur.objects.filter(culture__user=request.user)
     return render(request, 'capteurs/list.html', {'capteurs': capteurs})
 
 def capteur_detail(request, pk):

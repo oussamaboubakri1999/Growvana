@@ -16,7 +16,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CultureForm
 
 def culture_list(request):
-    cultures = Culture.objects.all()
+    cultures = Culture.objects.filter(user=request.user)
     return render(request, 'culture/list.html', {'cultures': cultures})
 
 def culture_detail(request, pk):
@@ -27,7 +27,9 @@ def culture_create(request):
     if request.method == 'POST':
         form = CultureForm(request.POST)
         if form.is_valid():
-            form.save()
+            culture = form.save(commit=False)
+            culture.user = request.user
+            culture.save()
             return redirect('culture:culture-list')
     else:
         form = CultureForm()

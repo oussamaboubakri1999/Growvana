@@ -12,7 +12,11 @@ class CultureHistoriqueViewSet(viewsets.ModelViewSet):
 # Traditional views
 def historique_list(request):
     """List all historique entries"""
-    historique = CultureHistorique.objects.all()
+    user = request.user
+    if hasattr(user, 'role') and user.role == 'admin':
+        historique = CultureHistorique.objects.all()
+    else:
+        historique = CultureHistorique.objects.filter(culture__user=user)
     return render(request, 'historique/list.html', {'historique': historique})
 
 def historique_detail(request, pk):

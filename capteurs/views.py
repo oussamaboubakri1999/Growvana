@@ -29,13 +29,23 @@ def capteur_detail(request, pk):
     return render(request, 'capteurs/detail.html', {'capteur': capteur})
 
 def capteur_create(request):
+    user = request.user
+    if hasattr(user, 'role') and user.role == 'admin':
+        cultures = Culture.objects.all()
+    else:
+        cultures = Culture.objects.filter(user=user)
     if request.method == 'POST':
         form = CapteurForm(request.POST)
+        form.fields['culture'].queryset = cultures
         if form.is_valid():
-            form.save()
+            capteur = form.save(commit=False)
+            if not (hasattr(user, 'role') and user.role == 'admin'):
+                capteur.culture = form.cleaned_data['culture']
+            capteur.save()
             return redirect('capteurs:capteur-list')
     else:
         form = CapteurForm()
+        form.fields['culture'].queryset = cultures
     return render(request, 'capteurs/form.html', {'form': form, 'action': 'Create'})
 
 def capteur_edit(request, pk):

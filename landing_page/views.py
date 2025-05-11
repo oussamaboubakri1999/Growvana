@@ -25,21 +25,10 @@ def register_view(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # Deactivate account until email is verified
+            user.is_active = True  # Activate account immediately, skip email verification
             user.save()
 
-            # Send verification email
-            subject = 'Verify your email for GrowVana'
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            verification_link = request.build_absolute_uri(f'/verify-email/{uid}/{token}/')
-            message = render_to_string('registration/verification_email.html', {
-                'user': user,
-                'verification_link': verification_link,
-            })
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
-
-            messages.success(request, 'Please check your email to verify your account.')
+            messages.success(request, 'Your account has been created. You can now log in.')
             return redirect('landing_page:login')
     else:
         form = UserCreationForm()

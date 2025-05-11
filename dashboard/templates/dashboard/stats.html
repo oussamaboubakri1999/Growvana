@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Statistiques{% endblock %}
 
@@ -71,13 +72,7 @@
         </div>
     </div>
 
-    <!-- Charts Section -->
-    <div class="mt-8">
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Évolution des Mesures</h2>
-            <div id="measurements-chart" class="h-96"></div>
-        </div>
-    </div>
+    
 
     <!-- Device Statistics -->
     <div class="mt-8">
@@ -102,33 +97,39 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        type: 'line',
-        data: {
-            labels: {{ dates|safe }},
-            datasets: [
-                {
-                    label: 'Température',
-                    data: {{ temperatures|safe }},
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Humidité',
-                    data: {{ humidities|safe }},
-                    borderColor: 'rgb(54, 162, 235)',
-                    tension: 0.1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+<script>
+    window.temperatureChartData = {
+        labels: {{ dates|safe }},
+        datasets: [
+            {
+                label: 'Température',
+                data: {{ temperatures|safe }},
+                borderColor: 'rgba(34,197,94,1)',
+                backgroundColor: 'rgba(34,197,94,0.15)',
+                pointBackgroundColor: 'rgba(34,197,94,1)',
+                pointBorderColor: 'rgba(22,163,74,1)',
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                tension: 0.4
+            },
+            {
+                label: 'Humidité',
+                data: {{ humidities|safe }},
+                borderColor: 'rgba(139,92,246,1)',
+                backgroundColor: 'rgba(139,92,246,0.13)',
+                pointBackgroundColor: 'rgba(139,92,246,1)',
+                pointBorderColor: 'rgba(91,33,182,1)',
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                tension: 0.4
             }
-        }
-    });
+        ]
+    };
+
+    window.measurementsChartData = {
+        labels: {{ measurement_dates|safe }},
+        datasets: {{ measurement_datasets|safe }}
+    };
 </script>
+<script src="{% static 'dashboard/script.js' %}"></script>
 {% endblock %}

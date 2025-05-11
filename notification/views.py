@@ -12,7 +12,11 @@ class AlertViewSet(viewsets.ModelViewSet):
 
 
 def notification_list(request):
-    alerts = Alert.objects.all().order_by('-timestamp')
+    user = request.user
+    if hasattr(user, 'role') and user.role == 'admin':
+        alerts = Alert.objects.all().order_by('-timestamp')
+    else:
+        alerts = Alert.objects.filter(culture__user=user).order_by('-timestamp')
     return render(request, 'notification/list.html', {'alerts': alerts})
 
 

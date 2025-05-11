@@ -1,0 +1,8 @@
+username,email,password
+admin_user,admin@example.com,test1234
+operator_user1,operator1@example.com,test1234
+operator_user2,operator2@example.com,test1234
+operator_user3,operator3@example.com,test1234
+operator_user4,operator4@example.com,test1234
+operator_user5,operator5@example.com,test1234
+viewer_user,viewer@example.com,test1234

@@ -1,0 +1,21 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-8">
+    <h2 class="text-2xl font-bold mb-4 text-blue-800 flex items-center gap-2">
+        <i class="fas fa-microchip text-blue-500"></i> Capteurs de {{ target_user.username }}
+    </h2>
+    {% if capteurs %}
+    <ul class="divide-y divide-gray-200 bg-white rounded-lg shadow">
+        {% for capteur in capteurs %}
+        <li class="py-3 px-4">
+            <span class="font-medium text-blue-800">{{ capteur.identifier }}</span>
+            <span class="ml-2 text-gray-500 text-sm">({{ capteur.type.name }})</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-400 italic">Aucun capteur trouvé pour cet utilisateur.</p>
+    {% endif %}
+    <a href="{% url 'dashboard:admin_user_detail' target_user.id %}" class="mt-6 inline-block text-blue-600 hover:underline">&larr; Retour au profil</a>
+</div>
+{% endblock %}

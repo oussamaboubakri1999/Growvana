@@ -1,26 +1,96 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Accueil{% endblock %}
 
 {% block content %}
     <h1 class="text-2xl font-bold mb-4">Tableau de bord</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-xl font-semibold">Cultures actives</h2>
-            <ul>
-                {% for activity in recent_activity %}
-                <li>{{ activity.culture.name }} - {{ activity.timestamp }}</li>
-                {% empty %}
-                <li>Aucune activité récente.</li>
+
+    {% if users_page %}
+    <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+            <i class="fas fa-users text-green-600"></i> Utilisateurs <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded ml-2">Admin</span>
+        </h2>
+        <ul class="divide-y divide-gray-200">
+            {% for user in users_page %}
+                <li class="flex items-center py-3 hover:bg-green-50 transition group">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-user text-green-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <a href="{% url 'dashboard:admin_user_detail' user.id %}" class="text-lg font-semibold text-green-800 group-hover:text-green-600 transition">
+                            {{ user.username }}
+                        </a>
+                        <span class="ml-2 text-gray-500 text-sm">{{ user.email }}</span>
+                        {% if user.role %}
+                            <span class="ml-2 inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-xs font-medium">{{ user.role|capfirst }}</span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'dashboard:admin_user_detail' user.id %}" class="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-medium shadow hover:bg-green-700 transition">Voir</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}
+        <nav aria-label="Pagination" class="mt-4 flex justify-center">
+            <ul class="inline-flex items-center space-x-1">
+                {% if users_page.has_previous %}
+                    <li><a class="px-3 py-1 rounded-l bg-gray-200 hover:bg-green-200 text-gray-700" href="?page={{ users_page.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+                {% for num in users_page.paginator.page_range %}
+                    <li>
+                        <a href="?page={{ num }}"
+                           class="px-3 py-1 rounded {% if users_page.number == num %}bg-green-600 text-white{% else %}bg-gray-200 text-gray-700{% endif %} hover:bg-green-100 transition">
+                            {{ num }}
+                        </a>
+                    </li>
                 {% endfor %}
+                {% if users_page.has_next %}
+                    <li><a class="px-3 py-1 rounded-r bg-gray-200 hover:bg-green-200 text-gray-700" href="?page={{ users_page.next_page_number }}">&raquo;</a></li>
+                {% endif %}
             </ul>
+        </nav>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-8">
+        <!-- Cultures Card -->
+        <div class="rounded-2xl shadow-lg bg-gradient-to-br from-green-100 to-green-300 p-8 flex flex-col items-center justify-center">
+            <div class="w-14 h-14 flex items-center justify-center rounded-full bg-green-200 mb-3">
+                <i class="fas fa-seedling text-3xl text-green-700"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-green-800">{{ total_cultures }}</div>
+            <div class="text-green-900 font-medium mt-1 text-lg">Cultures</div>
         </div>
-        <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-xl font-semibold">Alertes</h2>
-            <ul>
-                {% for alert in alerts %}
+        <!-- Capteurs Card -->
+        <div class="rounded-2xl shadow-lg bg-gradient-to-br from-blue-100 to-blue-300 p-8 flex flex-col items-center justify-center">
+            <div class="w-14 h-14 flex items-center justify-center rounded-full bg-blue-200 mb-3">
+                <i class="fas fa-microchip text-3xl text-blue-700"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-blue-800">{{ total_capteurs }}</div>
+            <div class="text-blue-900 font-medium mt-1 text-lg">Capteurs</div>
+        </div>
+        <!-- Alertes Card -->
+        <div class="rounded-2xl shadow-lg bg-gradient-to-br from-yellow-100 to-yellow-300 p-8 flex flex-col items-center justify-center">
+            <div class="w-14 h-14 flex items-center justify-center rounded-full bg-yellow-200 mb-3">
+                <i class="fas fa-exclamation-triangle text-3xl text-yellow-700"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-yellow-800">{{ total_alerts }}</div>
+            <div class="text-yellow-900 font-medium mt-1 text-lg">Alertes</div>
+        </div>
+    </div>
+    <!-- Recent Activity/Stats/Users -->
+    {% comment %}  {% endcomment %}
+        
+    </div>
+    <!-- End User List -->
+    
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold">Alertes</h2>
+        <ul>
+            {% for alert in alerts %}
                 <li>{{ alert.message }} - {{ alert.timestamp }}</li>
-                {% empty %}
+            {% empty %}
                 <li>Aucune alerte.</li>
                 {% endfor %}
             </ul>
@@ -36,4 +106,67 @@
             </ul>
         </div>
     </div>
+
+    {% if users_page %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <div class="bg-white p-4 rounded shadow col-span-1 md:col-span-3">
+            <h2 class="text-xl font-semibold mb-4">Activité récente (7 jours)</h2>
+            <canvas id="activityChart" height="100"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">Alertes</h2>
+            <canvas id="alertChart" height="100"></canvas>
+        </div>
+
+    </div>
+    <script>
+            });
+            // Alerts chart
+            var alertData = {{ dashboard_alert_data|safe }};
+            var ctx2 = document.getElementById('alertChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: alertData.labels,
+                    datasets: [{
+                        label: 'Alertes',
+                        data: alertData.counts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(255, 206, 86, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true }
+            });
+            // Measurements chart
+            var measurementData = {{ dashboard_measurement_data|safe }};
+            var ctx3 = document.getElementById('measurementChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: measurementData.labels,
+                    datasets: measurementData.datasets
+                },
+                options: { responsive: true }
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.dashboardActivityData = {{ dashboard_activity_data|safe }};
+        window.dashboardAlertData = {{ dashboard_alert_data|safe }};
+        window.dashboardMeasurementData = {{ dashboard_measurement_data|safe }};
+    </script>
+    <script src="{% static 'dashboard/script.js' %}"></script>
 {% endblock %}

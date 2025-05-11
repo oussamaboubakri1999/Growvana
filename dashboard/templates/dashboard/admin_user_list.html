@@ -1,0 +1,35 @@
+{% extends 'dashboard/base.html' %}
+{% block dashboard_content %}
+<h2>Liste des utilisateurs</h2>
+<input type="text" id="userSearch" class="form-control mb-3" placeholder="Rechercher par nom ou email...">
+<ul id="userList">
+    {% for user in users %}
+        <li data-username="{{ user.username|lower }}" data-email="{{ user.email|lower }}">
+            <a href="{% url 'dashboard:admin_user_detail' user.id %}">
+                {{ user.username }}
+                <span class="badge bg-info text-dark mx-1">{{ user.role|capfirst }}</span>
+                {% if user == request.user %}<span class="badge bg-warning text-dark">Vous (admin)</span>{% endif %}
+                <span class="text-muted">{{ user.email }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('userSearch');
+        const userList = document.getElementById('userList');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            Array.from(userList.children).forEach(li => {
+                const username = li.getAttribute('data-username');
+                const email = li.getAttribute('data-email');
+                if (username.includes(query) || email.includes(query)) {
+                    li.style.display = '';
+                } else {
+                    li.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

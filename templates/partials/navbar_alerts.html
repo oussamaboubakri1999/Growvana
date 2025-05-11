@@ -1,0 +1,4 @@
+{# templates/partials/navbar_alerts.html #}
+{% for alert in alerts %}
+    <li><a class="dropdown-item" href="#">{{ alert.message|truncatechars:40 }}</a></li>
+{% endfor %}

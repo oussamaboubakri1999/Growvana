@@ -24,11 +24,15 @@ def culture_detail(request, pk):
     return render(request, 'culture/detail.html', {'culture': culture})
 
 def culture_create(request):
+    user = request.user
     if request.method == 'POST':
         form = CultureForm(request.POST)
         if form.is_valid():
             culture = form.save(commit=False)
-            culture.user = request.user
+            if hasattr(user, 'role') and user.role == 'admin' and form.cleaned_data.get('user'):
+                culture.user = form.cleaned_data['user']
+            else:
+                culture.user = user
             culture.save()
             return redirect('culture:culture-list')
     else:

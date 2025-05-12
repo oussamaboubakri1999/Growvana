@@ -139,10 +139,12 @@ def dashboard_home(request):
         latest_measurements = Mesure.objects.filter(culture__user=user).order_by('-timestamp')[:3]
         alerts = Alert.objects.filter(culture__user=user).order_by('-timestamp')[:5]
         capteurs = Capteur.objects.filter(culture__user=user)
+        cultures = Culture.objects.filter(user=user).order_by('-id')
         context['recent_activity'] = recent_activity
         context['latest_measurements'] = latest_measurements
         context['alerts'] = alerts
         context['capteurs'] = capteurs
+        context['cultures'] = cultures
     return render(request, 'dashboard/home.html', context)
 
 @login_required
